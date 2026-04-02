@@ -339,13 +339,164 @@ body {
 .ctrl-btn.challenge-end:hover { background: #b91c1c; border-color: #b91c1c; }
 
 /* ── Responsive ── */
-@media (max-width: 480px) {
-  .tabs { grid-template-columns: 1fr; }
-  .stats-row { flex-wrap: wrap; }
-  .stat-box { flex-basis: calc(33% - 6px); }
-  .timer-box { flex-basis: calc(33% - 6px); width: auto; }
-  .choice-grid, .part-cards, .tile-grid { grid-template-columns: 1fr; }
-  .word-display { font-size: 30px; }
+@media (max-width: 600px) {
+  .wrap {
+    padding: 16px 12px 32px;
+  }
+
+  .header {
+    margin-bottom: 14px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+    letter-spacing: -0.3px;
+  }
+
+  .header .sub {
+    font-size: 14px;
+    margin-top: 2px;
+  }
+
+  .tier-row {
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tier-row-label {
+    font-size: 10px;
+    margin-right: 0;
+  }
+
+  .tier-btn {
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+
+  .tabs {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .tab-btn {
+    padding: 11px 8px;
+    font-size: 13px;
+    border-radius: 11px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .stat-box,
+  .timer-box {
+    width: auto;
+    min-width: 0;
+    padding: 9px 6px;
+    border-radius: 11px;
+  }
+
+  .stat-label,
+  .timer-label {
+    font-size: 9px;
+  }
+
+  .stat-value,
+  .timer-value {
+    font-size: 18px;
+  }
+
+  .card {
+    padding: 18px 16px;
+    border-radius: 18px;
+  }
+
+  .word-display {
+    font-size: 30px;
+    margin-bottom: 4px;
+  }
+
+  .word-hint {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .instruction {
+    font-size: 14px;
+    margin-bottom: 14px;
+    min-height: 0;
+  }
+
+  .part-cards {
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .part-card {
+    padding: 12px 14px;
+  }
+
+  .part-card .pc-part {
+    font-size: 18px;
+  }
+
+  .part-card .pc-meaning {
+    font-size: 13px;
+  }
+
+  .choice-grid,
+  .tile-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .choice-btn,
+  .tile-btn {
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+
+  .controls {
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 14px;
+  }
+
+  .ctrl-btn {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .ctrl-btn.challenge-start {
+    flex: 1 1 100%;
+    order: 1;
+  }
+
+  .ctrl-btn.primary {
+    flex: 1 1 auto;
+    order: 2;
+  }
+
+  .controls .ctrl-btn:not(.challenge-start):not(.primary) {
+    order: 3;
+  }
+
+  .meaning-reveal {
+    margin-top: 16px;
+    padding-top: 14px;
+  }
+
+  .part-breakdown {
+    margin-top: 10px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
 }
 </style>
 </head>
@@ -358,7 +509,7 @@ body {
   </header>
 
   <div class="tier-row">
-    <span class="tier-row-label">Level</span>
+    <span class="tier-row-label">Tier</span>
     <button class="tier-btn active" id="tierBtn_tier_1" onclick="setTier('tier_1')">Tier 1</button>
     <button class="tier-btn"        id="tierBtn_tier_2" onclick="setTier('tier_2')">Tier 2</button>
     <button class="tier-btn"        id="tierBtn_tier_3" onclick="setTier('tier_3')">Tier 3</button>
@@ -438,7 +589,6 @@ const wordBank = {
     definition: "see before",
     part_distractors: [[], []],
     definition_distractors: ["see again", "not see", "look around"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["un", "happy"], ["care", "less"]]
   },
   {
@@ -448,7 +598,6 @@ const wordBank = {
     definition: "heat before",
     part_distractors: [[], []],
     definition_distractors: ["heat again", "not heat", "measure heat"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "heat"], ["un", "kind"], ["care", "less"]]
   },
   {
@@ -458,7 +607,6 @@ const wordBank = {
     definition: "pay before",
     part_distractors: [[], []],
     definition_distractors: ["pay again", "not pay", "carry money"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["un", "happy"], ["teach", "er"]]
   },
   {
@@ -468,7 +616,6 @@ const wordBank = {
     definition: "test before",
     part_distractors: [[], []],
     definition_distractors: ["test again", "not test", "study the test"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "test"], ["un", "kind"], ["teach", "er"]]
   },
   {
@@ -478,7 +625,6 @@ const wordBank = {
     definition: "play again",
     part_distractors: [[], []],
     definition_distractors: ["play before", "not play", "stop playing"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["pre", "view"], ["un", "happy"], ["care", "less"]]
   },
   {
@@ -488,7 +634,6 @@ const wordBank = {
     definition: "write again",
     part_distractors: [[], []],
     definition_distractors: ["write before", "not write", "read again"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["pre", "view"], ["re", "play"], ["care", "less"]]
   },
   {
@@ -498,7 +643,6 @@ const wordBank = {
     definition: "read again",
     part_distractors: [[], []],
     definition_distractors: ["read before", "not read", "read slowly"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["pre", "view"], ["teach", "er"]]
   },
   {
@@ -508,7 +652,6 @@ const wordBank = {
     definition: "build again",
     part_distractors: [[], []],
     definition_distractors: ["build before", "not build", "break apart"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["un", "happy"], ["care", "less"]]
   },
   {
@@ -518,7 +661,6 @@ const wordBank = {
     definition: "not happy",
     part_distractors: [[], []],
     definition_distractors: ["very happy", "happy again", "without joy"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["pre", "view"], ["care", "less"]]
   },
   {
@@ -528,7 +670,6 @@ const wordBank = {
     definition: "reverse an action",
     part_distractors: [[], []],
     definition_distractors: ["do again", "do before", "do more"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "do"], ["pre", "pay"], ["teach", "er"]]
   },
   {
@@ -538,7 +679,6 @@ const wordBank = {
     definition: "reverse tying",
     part_distractors: [[], []],
     definition_distractors: ["tie again", "tie before", "tie tightly"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["un", "kind"], ["care", "less"]]
   },
   {
@@ -548,7 +688,6 @@ const wordBank = {
     definition: "not clear",
     part_distractors: [[], []],
     definition_distractors: ["very clear", "clear again", "without words"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["pre", "view"], ["teach", "er"]]
   },
   {
@@ -558,7 +697,6 @@ const wordBank = {
     definition: "not fair",
     part_distractors: [[], []],
     definition_distractors: ["very fair", "fair again", "without rules"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["un", "happy"], ["pre", "pay"], ["care", "less"]]
   },
   {
@@ -568,7 +706,6 @@ const wordBank = {
     definition: "not agree",
     part_distractors: [[], []],
     definition_distractors: ["agree again", "agree before", "look together"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["un", "happy"], ["care", "less"]]
   },
   {
@@ -578,7 +715,6 @@ const wordBank = {
     definition: "not like",
     part_distractors: [[], []],
     definition_distractors: ["like again", "like before", "look like"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["pre", "view"], ["un", "happy"]]
   },
   {
@@ -588,7 +724,6 @@ const wordBank = {
     definition: "not honest",
     part_distractors: [[], []],
     definition_distractors: ["honest again", "very honest", "full of honesty"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["un", "kind"], ["care", "less"], ["teach", "er"]]
   },
   {
@@ -598,7 +733,6 @@ const wordBank = {
     definition: "read in the wrong way",
     part_distractors: [[], []],
     definition_distractors: ["read again", "not read", "read before"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "read"], ["pre", "view"], ["teach", "er"]]
   },
   {
@@ -608,7 +742,6 @@ const wordBank = {
     definition: "spell the wrong way",
     part_distractors: [[], []],
     definition_distractors: ["spell again", "not spell", "spell before"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["un", "kind"], ["care", "less"]]
   },
   {
@@ -618,7 +751,6 @@ const wordBank = {
     definition: "put in the wrong place",
     part_distractors: [[], []],
     definition_distractors: ["put again", "put before", "place neatly"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["pre", "view"], ["care", "less"]]
   },
   {
@@ -628,7 +760,6 @@ const wordBank = {
     definition: "person who teaches",
     part_distractors: [[], []],
     definition_distractors: ["person who learns", "place to teach", "person who watches"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["read", "er"], ["care", "less"], ["act", "or"]]
   },
   {
@@ -638,7 +769,6 @@ const wordBank = {
     definition: "person who reads",
     part_distractors: [[], []],
     definition_distractors: ["person who writes", "place to read", "person who teaches"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["teach", "er"], ["care", "less"], ["act", "or"]]
   },
   {
@@ -648,7 +778,6 @@ const wordBank = {
     definition: "person who farms",
     part_distractors: [[], []],
     definition_distractors: ["place to farm", "person who reads", "person who teaches"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["teach", "er"], ["care", "less"], ["act", "or"]]
   },
   {
@@ -658,7 +787,6 @@ const wordBank = {
     definition: "person who acts",
     part_distractors: [[], []],
     definition_distractors: ["person who watches", "place to act", "person who teaches"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["teach", "er"], ["care", "less"], ["read", "er"]]
   },
   {
@@ -668,7 +796,6 @@ const wordBank = {
     definition: "full of help",
     part_distractors: [[], []],
     definition_distractors: ["without help", "person who helps", "help again"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "less"], ["joy", "ful"], ["teach", "er"]]
   },
   {
@@ -678,7 +805,6 @@ const wordBank = {
     definition: "full of joy",
     part_distractors: [[], []],
     definition_distractors: ["without joy", "joy again", "person who feels joy"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "less"], ["help", "ful"], ["teach", "er"]]
   },
   {
@@ -688,7 +814,6 @@ const wordBank = {
     definition: "full of care",
     part_distractors: [[], []],
     definition_distractors: ["without care", "care again", "person who cares"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "less"], ["help", "ful"], ["teach", "er"]]
   },
   {
@@ -698,7 +823,6 @@ const wordBank = {
     definition: "without care",
     part_distractors: [[], []],
     definition_distractors: ["full of care", "care again", "person who cares"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "ful"], ["help", "ful"], ["teach", "er"]]
   },
   {
@@ -708,7 +832,6 @@ const wordBank = {
     definition: "without hope",
     part_distractors: [[], []],
     definition_distractors: ["full of hope", "hope again", "person who hopes"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "less"], ["help", "ful"], ["teach", "er"]]
   },
   {
@@ -718,7 +841,6 @@ const wordBank = {
     definition: "without fear",
     part_distractors: [[], []],
     definition_distractors: ["full of fear", "fear again", "person who fears"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "less"], ["help", "ful"], ["teach", "er"]]
   },
   {
@@ -728,7 +850,6 @@ const wordBank = {
     definition: "state of being kind",
     part_distractors: [[], []],
     definition_distractors: ["not kind", "kind again", "person who is kind"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "less"], ["re", "play"], ["teach", "er"]]
   },
   {
@@ -738,7 +859,6 @@ const wordBank = {
     definition: "state of being sad",
     part_distractors: [[], []],
     definition_distractors: ["not sad", "sad again", "person who is sad"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "less"], ["re", "play"], ["teach", "er"]]
   },
   {
@@ -748,7 +868,6 @@ const wordBank = {
     definition: "state of being dark",
     part_distractors: [[], []],
     definition_distractors: ["not dark", "dark again", "person who is dark"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "less"], ["re", "play"], ["teach", "er"]]
   },
   {
@@ -758,7 +877,6 @@ const wordBank = {
     definition: "in a quick way",
     part_distractors: [[], []],
     definition_distractors: ["not quick", "very slow", "quick again"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["slow", "ly"], ["soft", "ly"], ["teach", "er"]]
   },
   {
@@ -768,7 +886,6 @@ const wordBank = {
     definition: "in a slow way",
     part_distractors: [[], []],
     definition_distractors: ["not slow", "very quick", "slow again"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["quick", "ly"], ["soft", "ly"], ["teach", "er"]]
   },
   {
@@ -778,7 +895,6 @@ const wordBank = {
     definition: "in a soft way",
     part_distractors: [[], []],
     definition_distractors: ["not soft", "very loud", "soft again"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["quick", "ly"], ["slow", "ly"], ["teach", "er"]]
   },
   {
@@ -788,7 +904,6 @@ const wordBank = {
     definition: "result of paying",
     part_distractors: [[], []],
     definition_distractors: ["person who pays", "pay again", "not pay"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["move", "ment"], ["ship", "ment"], ["teach", "er"]]
   },
   {
@@ -798,7 +913,6 @@ const wordBank = {
     definition: "result of moving",
     part_distractors: [[], []],
     definition_distractors: ["person who moves", "move again", "not move"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["pay", "ment"], ["ship", "ment"], ["teach", "er"]]
   },
   {
@@ -808,7 +922,6 @@ const wordBank = {
     definition: "able to be read",
     part_distractors: [[], []],
     definition_distractors: ["able to write", "person who reads", "read again"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["wash", "able"], ["break", "able"], ["teach", "er"]]
   },
   {
@@ -818,7 +931,6 @@ const wordBank = {
     definition: "able to be washed",
     part_distractors: [[], []],
     definition_distractors: ["able to read", "person who washes", "wash again"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["read", "able"], ["break", "able"], ["teach", "er"]]
   },
   {
@@ -828,7 +940,6 @@ const wordBank = {
     definition: "one wheel",
     part_distractors: [[], []],
     definition_distractors: ["two wheels", "three wheels", "one horn"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["bi", "cycle"], ["tri", "cycle"], ["uni", "corn"]]
   },
   {
@@ -838,7 +949,6 @@ const wordBank = {
     definition: "two wheels",
     part_distractors: [[], []],
     definition_distractors: ["one wheel", "three wheels", "two horns"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["uni", "cycle"], ["tri", "cycle"], ["triangle", "shape"]]
   },
   {
@@ -848,7 +958,6 @@ const wordBank = {
     definition: "shape with three angles",
     part_distractors: [[], []],
     definition_distractors: ["shape with two angles", "shape with four sides", "one angle shape"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["tri", "cycle"], ["bi", "cycle"], ["uni", "corn"]]
   },
   {
@@ -858,7 +967,6 @@ const wordBank = {
     definition: "three wheels",
     part_distractors: [[], []],
     definition_distractors: ["two wheels", "one wheel", "three angles"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["bi", "cycle"], ["uni", "cycle"], ["triangle", "shape"]]
   },
   {
@@ -868,7 +976,6 @@ const wordBank = {
     definition: "same look for one group",
     part_distractors: [[], []],
     definition_distractors: ["two shapes", "many forms", "not matching"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["uni", "cycle"], ["bi", "cycle"], ["tri", "pod"]]
   },
   {
@@ -878,7 +985,6 @@ const wordBank = {
     definition: "carry across",
     part_distractors: [[], []],
     definition_distractors: ["carry in", "carry out", "look across"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["im", "port"], ["ex", "port"], ["spect", "ator"]]
   },
   {
@@ -888,7 +994,6 @@ const wordBank = {
     definition: "study of life",
     part_distractors: [[], []],
     definition_distractors: ["study of earth", "writing about life", "story of life"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["geo", "graphy"], ["tele", "phone"], ["spect", "ator"]]
   },
   {
@@ -898,7 +1003,6 @@ const wordBank = {
     definition: "writing about earth",
     part_distractors: [[], []],
     definition_distractors: ["study of earth", "measure of earth", "story of earth"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["bio", "logy"], ["tele", "phone"], ["trans", "port"]]
   },
   {
@@ -908,7 +1012,6 @@ const wordBank = {
     definition: "sound from far",
     part_distractors: [[], []],
     definition_distractors: ["look from far", "write from far", "small sound"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["tele", "scope"], ["bio", "logy"], ["spect", "ator"]]
   },
   {
@@ -918,7 +1021,6 @@ const wordBank = {
     definition: "look far away",
     part_distractors: [[], []],
     definition_distractors: ["hear far", "measure far", "carry far"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["tele", "phone"], ["spect", "ator"], ["bio", "logy"]]
   },
   {
@@ -928,7 +1030,6 @@ const wordBank = {
     definition: "person who watches",
     part_distractors: [[], []],
     definition_distractors: ["person who teaches", "person who builds", "person who carries"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["trans", "port"], ["tele", "phone"], ["bio", "logy"]]
   },
   {
@@ -938,7 +1039,6 @@ const wordBank = {
     definition: "look into",
     part_distractors: [[], []],
     definition_distractors: ["look again", "look out", "carry into"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["spect", "ator"], ["tele", "phone"], ["bio", "logy"]]
   },
   {
@@ -948,7 +1048,6 @@ const wordBank = {
     definition: "measure around a shape",
     part_distractors: [[], []],
     definition_distractors: ["distance to center", "same on both sides", "area measure"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["circum", "ference"], ["sym", "metry"], ["chrono", "logy"]]
   }
 ],
@@ -961,7 +1060,6 @@ tier_2: [
     definition: "say before",
     part_distractors: [[], []],
     definition_distractors: ["say again", "not say", "carry words"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["pre", "view"], ["re", "play"], ["mis", "read"]]
   },
   {
@@ -971,7 +1069,6 @@ tier_2: [
     definition: "before history",
     part_distractors: [[], []],
     definition_distractors: ["after history", "story of history", "write history"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["pre", "view"], ["re", "play"], ["tele", "phone"]]
   },
   {
@@ -981,7 +1078,6 @@ tier_2: [
     definition: "tell again",
     part_distractors: [[], []],
     definition_distractors: ["tell before", "not tell", "tell softly"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "play"], ["pre", "view"], ["teach", "er"]]
   },
   {
@@ -991,7 +1087,6 @@ tier_2: [
     definition: "look again",
     part_distractors: [[], []],
     definition_distractors: ["see before", "not see", "see far away"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["pre", "view"], ["re", "play"], ["tele", "scope"]]
   },
   {
@@ -1001,7 +1096,6 @@ tier_2: [
     definition: "not able to do it",
     part_distractors: [[], []],
     definition_distractors: ["able to do it", "do it again", "do it before"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["read", "able"], ["wash", "able"], ["un", "kind"]]
   },
   {
@@ -1011,7 +1105,6 @@ tier_2: [
     definition: "not active",
     part_distractors: [[], []],
     definition_distractors: ["very active", "active again", "active before"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["in", "correct"], ["im", "possible"], ["ir", "regular"]]
   },
   {
@@ -1021,7 +1114,6 @@ tier_2: [
     definition: "not correct",
     part_distractors: [[], []],
     definition_distractors: ["very correct", "correct again", "correct before"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["in", "active"], ["im", "possible"], ["ir", "regular"]]
   },
   {
@@ -1031,7 +1123,6 @@ tier_2: [
     definition: "not possible",
     part_distractors: [[], []],
     definition_distractors: ["possible again", "very possible", "possible before"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["in", "correct"], ["ir", "regular"], ["dis", "like"]]
   },
   {
@@ -1041,7 +1132,6 @@ tier_2: [
     definition: "not regular",
     part_distractors: [[], []],
     definition_distractors: ["regular again", "very regular", "same size"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["im", "possible"], ["in", "active"], ["re", "play"]]
   },
   {
@@ -1051,7 +1141,6 @@ tier_2: [
     definition: "take apart a connection",
     part_distractors: [[], []],
     definition_distractors: ["connect again", "join before", "sound from far"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["dis", "like"], ["re", "play"], ["trans", "port"]]
   },
   {
@@ -1061,7 +1150,6 @@ tier_2: [
     definition: "behave in the wrong way",
     part_distractors: [[], []],
     definition_distractors: ["behave again", "not behave", "behave before"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["mis", "read"], ["mis", "place"], ["re", "play"]]
   },
   {
@@ -1071,7 +1159,6 @@ tier_2: [
     definition: "treat badly",
     part_distractors: [[], []],
     definition_distractors: ["treat again", "treat before", "full of treats"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["mis", "read"], ["mis", "place"], ["re", "play"]]
   },
   {
@@ -1081,7 +1168,6 @@ tier_2: [
     definition: "person who invents",
     part_distractors: [[], []],
     definition_distractors: ["person who watches", "person who teaches", "place to invent"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["teach", "er"], ["act", "or"], ["read", "er"]]
   },
   {
@@ -1091,7 +1177,6 @@ tier_2: [
     definition: "full of hope",
     part_distractors: [[], []],
     definition_distractors: ["without hope", "hope again", "person who hopes"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "ful"], ["care", "less"], ["joy", "ful"]]
   },
   {
@@ -1101,7 +1186,6 @@ tier_2: [
     definition: "without a home",
     part_distractors: [[], []],
     definition_distractors: ["full of home", "home again", "person who has a home"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "less"], ["hope", "less"], ["fear", "less"]]
   },
   {
@@ -1111,7 +1195,6 @@ tier_2: [
     definition: "state of being ill",
     part_distractors: [[], []],
     definition_distractors: ["not ill", "person who is ill", "ill again"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["sad", "ness"], ["dark", "ness"], ["kind", "ness"]]
   },
   {
@@ -1121,7 +1204,6 @@ tier_2: [
     definition: "in a brave way",
     part_distractors: [[], []],
     definition_distractors: ["not brave", "very scared", "brave again"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["quick", "ly"], ["slow", "ly"], ["soft", "ly"]]
   },
   {
@@ -1131,7 +1213,6 @@ tier_2: [
     definition: "result of shipping",
     part_distractors: [[], []],
     definition_distractors: ["person who ships", "ship again", "not ship"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["pay", "ment"], ["move", "ment"], ["teach", "er"]]
   },
   {
@@ -1141,7 +1222,6 @@ tier_2: [
     definition: "result of enjoying",
     part_distractors: [[], []],
     definition_distractors: ["person who enjoys", "enjoy again", "not enjoy"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["pay", "ment"], ["move", "ment"], ["teach", "er"]]
   },
   {
@@ -1151,7 +1231,6 @@ tier_2: [
     definition: "able to be broken",
     part_distractors: [[], []],
     definition_distractors: ["able to fix", "person who breaks", "break again"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["read", "able"], ["wash", "able"], ["teach", "er"]]
   },
   {
@@ -1161,7 +1240,6 @@ tier_2: [
     definition: "able to be carried",
     part_distractors: [[], []],
     definition_distractors: ["able to write", "carry across", "person who carries"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["trans", "port"], ["im", "port"], ["ex", "port"]]
   },
   {
@@ -1171,7 +1249,6 @@ tier_2: [
     definition: "person who studies science",
     part_distractors: [[], []],
     definition_distractors: ["person who teaches science", "place for science", "person who watches"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["art", "ist"], ["piano", "ist"], ["teach", "er"]]
   },
   {
@@ -1181,7 +1258,6 @@ tier_2: [
     definition: "person who makes art",
     part_distractors: [[], []],
     definition_distractors: ["person who studies science", "place for art", "person who watches"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["science", "ist"], ["piano", "ist"], ["teach", "er"]]
   },
   {
@@ -1191,7 +1267,6 @@ tier_2: [
     definition: "person who plays piano",
     part_distractors: [[], []],
     definition_distractors: ["person who studies piano", "place for piano", "person who teaches"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["science", "ist"], ["art", "ist"], ["teach", "er"]]
   },
   {
@@ -1201,7 +1276,6 @@ tier_2: [
     definition: "using two languages",
     part_distractors: [[], []],
     definition_distractors: ["using one language", "using three languages", "writing language"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["bi", "cycle"], ["tri", "pod"], ["uni", "form"]]
   },
   {
@@ -1211,7 +1285,6 @@ tier_2: [
     definition: "cut into two parts",
     part_distractors: [[], []],
     definition_distractors: ["cut into three parts", "cut again", "cut around"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["bi", "cycle"], ["tri", "pod"], ["uni", "form"]]
   },
   {
@@ -1221,7 +1294,6 @@ tier_2: [
     definition: "three-foot stand",
     part_distractors: [[], []],
     definition_distractors: ["two-foot stand", "one wheel", "three wheels"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["tri", "cycle"], ["bi", "cycle"], ["uni", "cycle"]]
   },
   {
@@ -1231,7 +1303,6 @@ tier_2: [
     definition: "carry in",
     part_distractors: [[], []],
     definition_distractors: ["carry out", "carry across", "look in"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["ex", "port"], ["trans", "port"], ["spect", "ator"]]
   },
   {
@@ -1241,7 +1312,6 @@ tier_2: [
     definition: "carry out",
     part_distractors: [[], []],
     definition_distractors: ["carry in", "carry across", "look out"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["im", "port"], ["trans", "port"], ["spect", "ator"]]
   },
   {
@@ -1251,7 +1321,6 @@ tier_2: [
     definition: "show honor or look back",
     part_distractors: [[], []],
     definition_distractors: ["look into", "look far", "look around"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["in", "spect"], ["tele", "scope"], ["spect", "ator"]]
   },
   {
@@ -1261,7 +1330,6 @@ tier_2: [
     definition: "writing about a life",
     part_distractors: [[], []],
     definition_distractors: ["study of life", "writing about earth", "story of time"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["bio", "logy"], ["geo", "graphy"], ["auto", "graph"]]
   },
   {
@@ -1271,7 +1339,6 @@ tier_2: [
     definition: "study of earth",
     part_distractors: [[], []],
     definition_distractors: ["writing about earth", "study of life", "measure of earth"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["geo", "graphy"], ["bio", "logy"], ["thermo", "meter"]]
   },
   {
@@ -1281,7 +1348,6 @@ tier_2: [
     definition: "measuring shapes or earth",
     part_distractors: [[], []],
     definition_distractors: ["writing about earth", "study of earth", "same on both sides"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["geo", "graphy"], ["peri", "meter"], ["sym", "metry"]]
   },
   {
@@ -1291,7 +1357,6 @@ tier_2: [
     definition: "order of time",
     part_distractors: [[], []],
     definition_distractors: ["measure of time", "story of time", "writing about time"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["peri", "meter"], ["sym", "metry"], ["circum", "ference"]]
   },
   {
@@ -1301,7 +1366,6 @@ tier_2: [
     definition: "in time order",
     part_distractors: [[], []],
     definition_distractors: ["around a shape", "same on both sides", "far away"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["chrono", "logy"], ["peri", "meter"], ["sym", "metry"]]
   },
   {
@@ -1311,7 +1375,6 @@ tier_2: [
     definition: "round shape",
     part_distractors: [[]],
     definition_distractors: ["straight shape", "three-angle shape", "two wheels"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["circum", "ference"], ["peri", "meter"], ["sym", "metry"]]
   },
   {
@@ -1321,7 +1384,6 @@ tier_2: [
     definition: "path that goes around",
     part_distractors: [[]],
     definition_distractors: ["measure around", "same on both sides", "look around"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["peri", "meter"], ["circum", "ference"], ["tele", "scope"]]
   },
   {
@@ -1331,7 +1393,6 @@ tier_2: [
     definition: "distance around a shape",
     part_distractors: [[], []],
     definition_distractors: ["measure of area", "same on both sides", "study of the earth"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["peri", "meter"], ["sym", "metry"], ["chrono", "logy"]]
   },
   {
@@ -1341,7 +1402,6 @@ tier_2: [
     definition: "same on both sides",
     part_distractors: [[], []],
     definition_distractors: ["measure around", "person who watches", "sound from far"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["peri", "meter"], ["circum", "ference"], ["chrono", "logy"]]
   },
   {
@@ -1351,7 +1411,6 @@ tier_2: [
     definition: "seeing from far away",
     part_distractors: [[], []],
     definition_distractors: ["hearing from far", "writing from far", "small seeing"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["tele", "phone"], ["tele", "scope"], ["micro", "scope"]]
   },
   {
@@ -1361,7 +1420,6 @@ tier_2: [
     definition: "writing from far away",
     part_distractors: [[], []],
     definition_distractors: ["hearing from far", "seeing from far", "small writing"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["tele", "phone"], ["geo", "graphy"], ["auto", "graph"]]
   },
   {
@@ -1371,7 +1429,6 @@ tier_2: [
     definition: "writing about one's life",
     part_distractors: [[], [], []],
     definition_distractors: ["study of life", "story of others", "writing about earth"],
-    quiz_part_indexes: [0, 1, 2],
     part_pair_distractors: [["bio", "logy"], ["geo", "graphy"], ["tele", "phone"]]
   },
   {
@@ -1381,7 +1438,6 @@ tier_2: [
     definition: "your own signature",
     part_distractors: [[], []],
     definition_distractors: ["writing about life", "writing from far", "study of writing"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["bio", "graphy"], ["tele", "graph"], ["geo", "graphy"]]
   },
   {
@@ -1391,7 +1447,6 @@ tier_2: [
     definition: "look at small things",
     part_distractors: [[], []],
     definition_distractors: ["look far away", "measure heat", "carry small things"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["tele", "scope"], ["spect", "ator"], ["peri", "meter"]]
   },
   {
@@ -1401,7 +1456,6 @@ tier_2: [
     definition: "very small chip",
     part_distractors: [[], []],
     definition_distractors: ["large chip", "chip that looks far", "chip that measures"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["micro", "scope"], ["tele", "scope"], ["thermo", "meter"]]
   },
   {
@@ -1411,7 +1465,6 @@ tier_2: [
     definition: "controls heat",
     part_distractors: [[], []],
     definition_distractors: ["measures heat", "measures time", "controls sound"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["thermo", "meter"], ["peri", "meter"], ["chrono", "logy"]]
   },
   {
@@ -1421,7 +1474,6 @@ tier_2: [
     definition: "measures heat",
     part_distractors: [[], []],
     definition_distractors: ["measures time", "measures earth", "measures sound"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["peri", "meter"], ["chrono", "logy"], ["circum", "ference"]]
   },
   {
@@ -1431,7 +1483,6 @@ tier_2: [
     definition: "place for water animals",
     part_distractors: [[]],
     definition_distractors: ["study of water", "moving water", "hot water"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["aqua", "tic"], ["sub", "marine"], ["tele", "phone"]]
   },
   {
@@ -1441,7 +1492,6 @@ tier_2: [
     definition: "related to water",
     part_distractors: [[]],
     definition_distractors: ["related to heat", "related to sound", "related to earth"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["aqua", "rium"], ["sub", "marine"], ["tele", "phone"]]
   },
   {
@@ -1451,7 +1501,6 @@ tier_2: [
     definition: "under the sea",
     part_distractors: [[], []],
     definition_distractors: ["across the sea", "sound from sea", "around the sea"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["sub", "way"], ["sub", "soil"], ["tele", "phone"]]
   },
   {
@@ -1461,7 +1510,6 @@ tier_2: [
     definition: "way under the ground",
     part_distractors: [[], []],
     definition_distractors: ["way across town", "looking far away", "same on both sides"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["sub", "soil"], ["sub", "marine"], ["tele", "phone"]]
   },
   {
@@ -1471,7 +1519,6 @@ tier_2: [
     definition: "soil under the top layer",
     part_distractors: [[], []],
     definition_distractors: ["soil around a circle", "soil from far away", "same on both sides"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["sub", "way"], ["sub", "marine"], ["tele", "phone"]]
   },
   {
@@ -1481,7 +1528,6 @@ tier_2: [
     definition: "below zero",
     part_distractors: [[], []],
     definition_distractors: ["above zero", "zero again", "measure zero"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["sub", "soil"], ["sub", "way"], ["tele", "phone"]]
   }
 ],
@@ -1494,7 +1540,6 @@ tier_3: [
     definition: "travel around something",
     part_distractors: [[], []],
     definition_distractors: ["measure around something", "same on both sides", "look around something"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["peri", "meter"], ["sym", "metry"], ["chrono", "logy"]]
   },
   {
@@ -1504,7 +1549,6 @@ tier_3: [
     definition: "tool to look around",
     part_distractors: [[], []],
     definition_distractors: ["tool to measure around", "tool to hear far", "tool to see small things"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["peri", "meter"], ["tele", "scope"], ["micro", "scope"]]
   },
   {
@@ -1514,7 +1558,6 @@ tier_3: [
     definition: "happen at the same time",
     part_distractors: [[], []],
     definition_distractors: ["measure time", "write about time", "travel through time"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["chrono", "logy"], ["sym", "metry"], ["peri", "meter"]]
   },
   {
@@ -1524,7 +1567,6 @@ tier_3: [
     definition: "sounds together in music",
     part_distractors: [[], []],
     definition_distractors: ["same on both sides", "sound from far", "measure of sound"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["tele", "phone"], ["sym", "metry"], ["chrono", "logy"]]
   },
   {
@@ -1534,7 +1576,6 @@ tier_3: [
     definition: "living together closely",
     part_distractors: [[], []],
     definition_distractors: ["same shape", "life from far", "measure of life"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["bio", "logy"], ["sym", "metry"], ["tele", "phone"]]
   },
   {
@@ -1544,7 +1585,6 @@ tier_3: [
     definition: "working by itself",
     part_distractors: [[]],
     definition_distractors: ["working from far away", "working with heat", "working in order"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["auto", "graph"], ["bio", "logy"], ["tele", "phone"]]
   },
   {
@@ -1554,7 +1594,6 @@ tier_3: [
     definition: "able to break down naturally",
     part_distractors: [[], []],
     definition_distractors: ["able to be carried", "able to be written", "study of life"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["bio", "logy"], ["break", "able"], ["port", "able"]]
   },
   {
@@ -1564,7 +1603,6 @@ tier_3: [
     definition: "study of very small life",
     part_distractors: [[], [], []],
     definition_distractors: ["writing about small life", "looking at small things", "study of earth"],
-    quiz_part_indexes: [0, 1, 2],
     part_pair_distractors: [["bio", "logy"], ["micro", "scope"], ["geo", "logy"]]
   },
   {
@@ -1574,7 +1612,6 @@ tier_3: [
     definition: "so small you need a microscope",
     part_distractors: [[], []],
     definition_distractors: ["far away", "very hot", "same on both sides"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["micro", "scope"], ["tele", "scope"], ["thermo", "meter"]]
   },
   {
@@ -1584,7 +1621,6 @@ tier_3: [
     definition: "system for carrying people or things",
     part_distractors: [[], []],
     definition_distractors: ["system for looking around", "writing from far", "same on both sides"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["trans", "port"], ["tele", "phone"], ["sym", "metry"]]
   },
   {
@@ -1594,7 +1630,6 @@ tier_3: [
     definition: "person who runs something",
     part_distractors: [[], []],
     definition_distractors: ["person who watches", "person who writes", "place that operates"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["act", "or"], ["teach", "er"], ["invent", "or"]]
   },
   {
@@ -1604,7 +1639,6 @@ tier_3: [
     definition: "person who teaches",
     part_distractors: [[], []],
     definition_distractors: ["person who watches", "person who carries", "place to teach"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["teach", "er"], ["act", "or"], ["invent", "or"]]
   },
   {
@@ -1614,7 +1648,6 @@ tier_3: [
     definition: "full of meaning",
     part_distractors: [[], []],
     definition_distractors: ["without meaning", "meaning again", "person who explains"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["care", "ful"], ["care", "less"], ["hope", "ful"]]
   },
   {
@@ -1624,7 +1657,6 @@ tier_3: [
     definition: "full of power",
     part_distractors: [[], []],
     definition_distractors: ["without power", "power again", "person with power"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["help", "ful"], ["care", "less"], ["hope", "ful"]]
   },
   {
@@ -1634,7 +1666,6 @@ tier_3: [
     definition: "state of being useful",
     part_distractors: [[], [], []],
     definition_distractors: ["without use", "person who uses", "use again"],
-    quiz_part_indexes: [1, 2],
     part_pair_distractors: [["care", "ful"], ["kind", "ness"], ["hope", "less"]]
   },
   {
@@ -1644,7 +1675,6 @@ tier_3: [
     definition: "result of growing or building",
     part_distractors: [[], []],
     definition_distractors: ["person who develops", "develop again", "not developed"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["move", "ment"], ["pay", "ment"], ["ship", "ment"]]
   },
   {
@@ -1654,7 +1684,6 @@ tier_3: [
     definition: "person who studies the earth",
     part_distractors: [[], []],
     definition_distractors: ["person who writes about earth", "study of earth", "measure of earth"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["geo", "logy"], ["art", "ist"], ["science", "ist"]]
   },
   {
@@ -1664,7 +1693,6 @@ tier_3: [
     definition: "related to heat",
     part_distractors: [[]],
     definition_distractors: ["related to water", "related to sound", "related to earth"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["thermo", "meter"], ["aqua", "tic"], ["tele", "phone"]]
   },
   {
@@ -1674,7 +1702,6 @@ tier_3: [
     definition: "structure that carries water",
     part_distractors: [[], []],
     definition_distractors: ["tool to measure water", "study of water", "hot water path"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["aqua", "rium"], ["trans", "port"], ["sub", "way"]]
   },
   {
@@ -1684,7 +1711,6 @@ tier_3: [
     definition: "carry across or move",
     part_distractors: [[], []],
     definition_distractors: ["carry out", "carry in", "look across"],
-    quiz_part_indexes: [0, 1],
     part_pair_distractors: [["trans", "port"], ["im", "port"], ["ex", "port"]]
   },
   {
@@ -1694,7 +1720,6 @@ tier_3: [
     definition: "across the Atlantic Ocean",
     part_distractors: [[], []],
     definition_distractors: ["under the Atlantic", "same on both sides", "far sound"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["trans", "port"], ["tele", "phone"], ["sym", "metry"]]
   },
   {
@@ -1704,7 +1729,6 @@ tier_3: [
     definition: "true writing, not made up",
     part_distractors: [[], []],
     definition_distractors: ["made-up story", "not reading", "story from far away"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["non", "sense"], ["non", "stop"], ["bio", "graphy"]]
   },
   {
@@ -1714,7 +1738,6 @@ tier_3: [
     definition: "something that does not make sense",
     part_distractors: [[], []],
     definition_distractors: ["something that makes sense", "sound from far", "measure around"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["non", "stop"], ["tele", "phone"], ["peri", "meter"]]
   },
   {
@@ -1724,7 +1747,6 @@ tier_3: [
     definition: "without stopping",
     part_distractors: [[], []],
     definition_distractors: ["stop again", "stop before", "same on both sides"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["non", "sense"], ["re", "play"], ["sym", "metry"]]
   },
   {
@@ -1734,7 +1756,6 @@ tier_3: [
     definition: "state of not being kind",
     part_distractors: [[], [], []],
     definition_distractors: ["full of kindness", "kind again", "person who is kind"],
-    quiz_part_indexes: [0, 2],
     part_pair_distractors: [["kind", "ness"], ["care", "less"], ["hope", "less"]]
   },
   {
@@ -1744,7 +1765,6 @@ tier_3: [
     definition: "lack of respect",
     part_distractors: [[], []],
     definition_distractors: ["look into", "carry across", "very respectful"],
-    quiz_part_indexes: [0],
     part_pair_distractors: [["re", "spect"], ["in", "spect"], ["trans", "port"]]
   },
   {
@@ -1754,7 +1774,6 @@ tier_3: [
     definition: "careful looking into something",
     part_distractors: [[], []],
     definition_distractors: ["looking around", "sound from far", "writing about earth"],
-    quiz_part_indexes: [1],
     part_pair_distractors: [["in", "spect"], ["spect", "ator"], ["tele", "phone"]]
   }
 ]
@@ -1867,21 +1886,6 @@ function setWordDisplay(word) {
   $('wordDisplay').textContent = word;
 }
 
-
-// Normalize text so Learn the Part can avoid weak questions like care = care.
-function normalizeMorphemeText(text) {
-  return String(text).toLowerCase().replace(/[^a-z]/g, '');
-}
-
-function getLearnPartIndexes(item) {
-  const base = Array.isArray(item.quiz_part_indexes) && item.quiz_part_indexes.length
-    ? [...item.quiz_part_indexes]
-    : item.parts.map((_, i) => i);
-
-  const strong = base.filter(i => normalizeMorphemeText(item.parts[i]) !== normalizeMorphemeText(item.part_meanings[i]));
-  return strong.length ? strong : base;
-}
-
 // ── Tier-based support helpers ────────────────────────────────────────────────
 // Returns true only for Tier 1. Used to gate scaffolding across all three modes.
 function isTier1() { return activeTier === 'tier_1'; }
@@ -1914,12 +1918,10 @@ function getDistractors(correct) {
 }
 
 // ── MODE 0 — Learn the Part ───────────────────────────────────────────────────
-
 function renderLearnThePart(item) {
-  const validIndexes = getLearnPartIndexes(item);
-  const idx          = validIndexes[Math.floor(Math.random() * validIndexes.length)];
-  const part         = item.parts[idx];
-  const correct      = item.part_meanings[idx];
+  const idx     = Math.floor(Math.random() * item.parts.length);
+  const part    = item.parts[idx];
+  const correct = item.part_meanings[idx];
 
   setWordDisplay(item.word);
   $('wordHint').textContent  = shouldShowHint() ? item.definition : '';
