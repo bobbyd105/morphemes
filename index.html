@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Morpheme Trainer</title>
+<style>
+:root {
+  --bg:       #f1f5f9;
+  --card:     #ffffff;
+  --ink:      #1e293b;
+  --muted:    #64748b;
+  --line:     #e2e8f0;
+  --accent:   #0021A5;
+  --accent-d: #001a82;
+  --teal:     #FA4616;
+  --teal-d:   #d63c10;
+  --green-t:  #166534;
+  --green-bg: #dcfce7;
+  --red-t:    #991b1b;
+  --red-bg:   #fee2e2;
+  --tile-bg:  #f8fafc;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.hidden { display: none !important; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px 56px;
+}
+
+/* ── Header ── */
+.header { margin-bottom: 22px; }
+.header h1 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+.header .sub {
+  color: var(--muted);
+  font-size: 15px;
+  margin-top: 3px;
+}
+
+/* ── Tabs ── */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.tab-btn {
+  padding: 13px 10px;
+  border-radius: 13px;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--muted);
+  transition: border-color 0.1s, color 0.1s, background 0.1s;
+  text-align: center;
+  line-height: 1.3;
+}
+.tab-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+.tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ── Tier selector ── */
+.tier-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.tier-row-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  margin-right: 2px;
+}
+.tier-btn {
+  padding: 7px 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--muted);
+  transition: border-color 0.1s, color 0.1s, background 0.1s;
+}
+.tier-btn:hover:not(.active) { border-color: var(--teal); color: var(--teal); }
+.tier-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+/* ── Stats row ── */
+.stats-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: stretch;
+}
+.stat-box {
+  flex: 1;
+  min-width: 0;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 11px 6px;
+  text-align: center;
+}
+.stat-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  margin-top: 2px;
+  color: var(--ink);
+}
+.timer-box {
+  display: none;
+  flex-shrink: 0;
+  width: 76px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 13px;
+  padding: 11px 6px;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.timer-box.visible { display: flex; }
+.timer-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  opacity: 0.85;
+}
+.timer-value { font-size: 22px; font-weight: 800; margin-top: 2px; }
+
+/* ── Card ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+}
+
+.word-display {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  line-height: 1.1;
+  margin-bottom: 6px;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+.instruction {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  min-height: 22px;
+}
+.word-hint {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+.word-hint:empty { display: none; }
+
+/* ── Part cards (Build the Word) ── */
+.part-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.part-card {
+  background: var(--tile-bg);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 14px 16px;
+}
+.part-card .pc-part { font-size: 20px; font-weight: 800; }
+.part-card .pc-meaning { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+/* ── Choice buttons ── */
+.choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.choice-btn {
+  padding: 14px 12px;
+  border-radius: 13px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  color: var(--ink);
+  line-height: 1.4;
+  transition: border-color 0.1s, transform 0.08s;
+}
+.choice-btn:active:not(:disabled) { transform: scale(0.97); }
+.choice-btn:hover:not(:disabled)  { border-color: var(--accent); }
+.choice-btn:disabled { cursor: default; }
+.choice-btn.correct { background: var(--green-bg); border-color: #86efac; color: var(--green-t); }
+.choice-btn.wrong   { background: var(--red-bg);   border-color: #fca5a5; color: var(--red-t);   }
+
+/* ── Tile grid (Slow It Down — part selection) ── */
+.tile-section { margin-bottom: 0; }
+.section-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.tile-btn {
+  background: var(--tile-bg);
+  border: 1.5px solid var(--line);
+  border-radius: 13px;
+  padding: 16px 12px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--ink);
+  transition: border-color 0.1s, background 0.1s, transform 0.08s;
+}
+.tile-btn:active:not(:disabled) { transform: scale(0.97); }
+.tile-btn:hover:not(:disabled)  { border-color: var(--accent); }
+.tile-btn:disabled { cursor: default; }
+.tile-btn.selected { background: var(--green-bg); border-color: #86efac; color: var(--green-t); }
+.tile-btn.nudge    { border-color: #fca5a5 !important; }
+
+/* ── Part breakdown (Slow It Down — after parts selected) ── */
+.part-breakdown {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: var(--tile-bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.9;
+}
+
+/* Meaning reveal section (Slow It Down step 2) */
+.meaning-reveal {
+  border-top: 1px solid var(--line);
+  margin-top: 20px;
+  padding-top: 18px;
+}
+
+/* ── Feedback ── */
+.feedback {
+  display: none;
+  margin-top: 16px;
+  padding: 13px 16px;
+  border-radius: 13px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.feedback.good { display: block; background: var(--green-bg); color: var(--green-t); }
+.feedback.bad  { display: block; background: var(--red-bg);   color: var(--red-t);   }
+.feedback strong { font-weight: 700; }
+.feedback .detail { font-size: 13px; margin-top: 3px; opacity: 0.85; }
+
+/* ── Controls ── */
+.controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  align-items: center;
+}
+.ctrl-btn {
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  transition: border-color 0.1s, background 0.1s;
+}
+.ctrl-btn:hover { border-color: var(--muted); }
+.ctrl-btn.primary {
+  background: var(--teal); border-color: var(--teal); color: #fff;
+}
+.ctrl-btn.primary:hover { background: var(--teal-d); border-color: var(--teal-d); }
+.ctrl-btn.challenge-start {
+  background: var(--accent); border-color: var(--accent); color: #fff;
+}
+.ctrl-btn.challenge-start:hover { background: var(--accent-d); border-color: var(--accent-d); }
+.ctrl-btn.challenge-end {
+  background: #dc2626; border-color: #dc2626; color: #fff;
+}
+.ctrl-btn.challenge-end:hover { background: #b91c1c; border-color: #b91c1c; }
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .tabs { grid-template-columns: 1fr; }
+  .stats-row { flex-wrap: wrap; }
+  .stat-box { flex-basis: calc(33% - 6px); }
+  .timer-box { flex-basis: calc(33% - 6px); width: auto; }
+  .choice-grid, .part-cards, .tile-grid { grid-template-columns: 1fr; }
+  .word-display { font-size: 30px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="header">
+    <h1>Morpheme Trainer</h1>
+    <p class="sub">Build word meaning one part at a time.</p>
+  </header>
+
+  <div class="tier-row">
+    <span class="tier-row-label">Level</span>
+    <button class="tier-btn active" id="tierBtn_tier_1" onclick="setTier('tier_1')">Tier 1</button>
+    <button class="tier-btn"        id="tierBtn_tier_2" onclick="setTier('tier_2')">Tier 2</button>
+    <button class="tier-btn"        id="tierBtn_tier_3" onclick="setTier('tier_3')">Tier 3</button>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" id="tab0" onclick="setMode(0)">Learn the Part</button>
+    <button class="tab-btn"        id="tab1" onclick="setMode(1)">Build the Word</button>
+    <button class="tab-btn"        id="tab2" onclick="setMode(2)">Slow It Down</button>
+  </nav>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-label">Correct</div>    <div class="stat-value" id="sCorrect">0</div></div>
+    <div class="stat-box"><div class="stat-label">Tried</div>      <div class="stat-value" id="sTried">0</div></div>
+    <div class="stat-box"><div class="stat-label">Streak</div>     <div class="stat-value" id="sStreak">0</div></div>
+    <div class="stat-box"><div class="stat-label">Best Streak</div><div class="stat-value" id="sBest">0</div></div>
+    <div class="stat-box"><div class="stat-label">Best 60s</div>   <div class="stat-value" id="sBest60">0</div></div>
+    <div class="timer-box" id="timerBox">
+      <div class="timer-label">Time</div>
+      <div class="timer-value" id="timerVal">1:00</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="word-display" id="wordDisplay"></div>
+    <div class="word-hint"    id="wordHint"></div>
+    <div class="instruction"  id="instruction"></div>
+
+    <!-- Learn the Part -->
+    <div id="area0">
+      <div class="choice-grid" id="choices0"></div>
+    </div>
+
+    <!-- Build the Word -->
+    <div id="area1" class="hidden">
+      <div class="part-cards" id="partCards1"></div>
+      <div class="choice-grid" id="choices1"></div>
+    </div>
+
+    <!-- Slow It Down -->
+    <div id="area2" class="hidden">
+      <div class="tile-section">
+        <div class="section-label">Select the parts</div>
+        <div class="tile-grid" id="tileGrid2"></div>
+      </div>
+      <div id="partBreakdown2" class="part-breakdown hidden"></div>
+      <div id="meaningReveal2" class="meaning-reveal hidden">
+        <div class="section-label">Now choose the meaning</div>
+        <div class="choice-grid" id="choices2"></div>
+      </div>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="controls">
+      <button class="ctrl-btn challenge-start" id="challengeBtn" onclick="toggleChallenge()">60-Second Challenge</button>
+      <button class="ctrl-btn primary" onclick="nextQuestion()">Next</button>
+      <button class="ctrl-btn" onclick="resetMode()">Reset This Mode</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Word bank ──────────────────────────────────────────────────────────────────
+// Three tiers: easy → intermediate → harder/abstract.
+// To load a full tier later, replace the array for that key.
+// All modes read from wordBank[activeTier] via getBank().
+const wordBank = {
+
+  // ── Tier 1 — simple prefixes & suffixes, everyday words ──────────────────
+  tier_1: [
+  { word:"preview", parts:["pre","view"], part_meanings:["before","see"], definition:"see before", definition_distractors:["see again","not see","look around"], part_pair_distractors:[["re","play"],["un","happy"],["care","less"]] },
+  { word:"replay", parts:["re","play"], part_meanings:["again","play"], definition:"play again", definition_distractors:["play before","not play","stop playing"], part_pair_distractors:[["pre","view"],["un","happy"],["care","less"]] },
+  { word:"rewrite", parts:["re","write"], part_meanings:["again","write"], definition:"write again", definition_distractors:["write before","not write","stop writing"], part_pair_distractors:[["pre","view"],["re","play"],["care","less"]] },
+  { word:"unhappy", parts:["un","happy"], part_meanings:["not","happy"], definition:"not happy", definition_distractors:["very happy","happy again","without joy"], part_pair_distractors:[["re","play"],["pre","view"],["care","less"]] },
+  { word:"undo", parts:["un","do"], part_meanings:["not","do"], definition:"reverse an action", definition_distractors:["do again","do before","do more"], part_pair_distractors:[["re","play"],["pre","view"],["care","less"]] },
+  { word:"teacher", parts:["teach","er"], part_meanings:["teach","person who"], definition:"person who teaches", definition_distractors:["person who learns","place to teach","person watching"], part_pair_distractors:[["read","er"],["care","less"],["pre","view"]] },
+  { word:"reader", parts:["read","er"], part_meanings:["read","person who"], definition:"person who reads", definition_distractors:["person who writes","person who watches","place to read"], part_pair_distractors:[["teach","er"],["care","less"],["pre","view"]] },
+  { word:"careless", parts:["care","less"], part_meanings:["care","without"], definition:"without care", definition_distractors:["full of care","person who cares","care again"], part_pair_distractors:[["pre","view"],["re","play"],["un","happy"]] },
+  { word:"helpful", parts:["help","ful"], part_meanings:["help","full of"], definition:"full of help", definition_distractors:["without help","person who helps","help again"], part_pair_distractors:[["care","less"],["re","play"],["pre","view"]] },
+  { word:"kindness", parts:["kind","ness"], part_meanings:["kind","state of"], definition:"state of being kind", definition_distractors:["not kind","person who is kind","kind again"], part_pair_distractors:[["care","less"],["re","play"],["pre","view"]] },
+  { word:"quickly", parts:["quick","ly"], part_meanings:["quick","in a way"], definition:"in a quick way", definition_distractors:["not quick","very slow","quick again"], part_pair_distractors:[["care","less"],["re","play"],["pre","view"]] },
+  { word:"payment", parts:["pay","ment"], part_meanings:["pay","result of"], definition:"result of paying", definition_distractors:["person who pays","pay again","not pay"], part_pair_distractors:[["care","less"],["re","play"],["pre","view"]] }
+]
+
+  // ── Tier 2 — Greek & Latin roots, content-area vocabulary ────────────────
+  tier_2: [
+  { word:"transport", parts:["trans","port"], part_meanings:["across","carry"], definition:"carry across", definition_distractors:["carry in","carry out","look across"], part_pair_distractors:[["spect","ator"],["bio","logy"],["tele","phone"]] },
+  { word:"export", parts:["ex","port"], part_meanings:["out","carry"], definition:"carry out", definition_distractors:["carry in","carry across","look outside"], part_pair_distractors:[["trans","port"],["bio","logy"],["tele","phone"]] },
+  { word:"inspect", parts:["in","spect"], part_meanings:["in","look"], definition:"look into", definition_distractors:["look out","look again","look across"], part_pair_distractors:[["spect","ator"],["tele","phone"],["bio","logy"]] },
+  { word:"spectator", parts:["spect","ator"], part_meanings:["look","person who"], definition:"person who watches", definition_distractors:["person who teaches","person who builds","person who carries"], part_pair_distractors:[["trans","port"],["tele","phone"],["bio","logy"]] },
+  { word:"biology", parts:["bio","logy"], part_meanings:["life","study of"], definition:"study of life", definition_distractors:["study of earth","writing about life","story of life"], part_pair_distractors:[["geo","graphy"],["tele","phone"],["spect","ator"]] },
+  { word:"geography", parts:["geo","graphy"], part_meanings:["earth","writing"], definition:"writing about earth", definition_distractors:["study of earth","measure of earth","story of earth"], part_pair_distractors:[["bio","logy"],["tele","phone"],["trans","port"]] },
+  { word:"telephone", parts:["tele","phone"], part_meanings:["far","sound"], definition:"sound from far", definition_distractors:["look from far","write from far","small sound"], part_pair_distractors:[["tele","scope"],["bio","logy"],["spect","ator"]] },
+  { word:"telescope", parts:["tele","scope"], part_meanings:["far","look"], definition:"look far away", definition_distractors:["hear far","measure far","carry far"], part_pair_distractors:[["tele","phone"],["spect","ator"],["bio","logy"]] },
+  { word:"microscope", parts:["micro","scope"], part_meanings:["small","look"], definition:"look at small things", definition_distractors:["look far","measure small","carry small"], part_pair_distractors:[["tele","scope"],["spect","ator"],["bio","logy"]] }
+]
+
+  // ── Tier 3 — abstract roots, measurement, multi-syllable ─────────────────
+  tier_3: [
+  { word:"chronology", parts:["chrono","logy"], part_meanings:["time","study/order"], definition:"order of time", definition_distractors:["measure of time","story of time","writing about time"], part_pair_distractors:[["peri","meter"],["sym","metry"],["circum","ference"]] },
+  { word:"circumference", parts:["circum","ference"], part_meanings:["around","carry"], definition:"distance around a shape", definition_distractors:["measure inside","center distance","shape area"], part_pair_distractors:[["peri","meter"],["sym","metry"],["chrono","logy"]] },
+  { word:"perimeter", parts:["peri","meter"], part_meanings:["around","measure"], definition:"measure around a shape", definition_distractors:["measure inside","measure center","area measure"], part_pair_distractors:[["circum","ference"],["sym","metry"],["chrono","logy"]] },
+  { word:"symmetry", parts:["sym","metry"], part_meanings:["same","measure"], definition:"same on both sides", definition_distractors:["measure around","look same","carry same"], part_pair_distractors:[["peri","meter"],["circum","ference"],["chrono","logy"]] },
+  { word:"thermometer", parts:["thermo","meter"], part_meanings:["heat","measure"], definition:"measure of heat", definition_distractors:["measure of time","measure of earth","measure of sound"], part_pair_distractors:[["peri","meter"],["chrono","logy"],["circum","ference"]] },
+  { word:"autobiography", parts:["auto","bio","graphy"], part_meanings:["self","life","writing"], definition:"writing about one's life", definition_distractors:["study of life","story of others","writing about earth"], part_pair_distractors:[["bio","logy"],["geo","graphy"],["tele","phone"]] }
+]
+};
+
+// ── Active tier ────────────────────────────────────────────────────────────────
+// Change activeTier to switch word sets. All modes read through getBank().
+let activeTier = 'tier_1';
+function getBank() { return wordBank[activeTier]; }
+
+// ── Per-mode stats ─────────────────────────────────────────────────────────────
+// Index 0 = Learn the Part, 1 = Build the Word, 2 = Slow It Down
+const modeStats = [
+  { correct:0, tried:0, streak:0, best:0, best60:0 },
+  { correct:0, tried:0, streak:0, best:0, best60:0 },
+  { correct:0, tried:0, streak:0, best:0, best60:0 }
+];
+
+// ── App state ──────────────────────────────────────────────────────────────────
+let mode     = 0;
+let current  = null;
+let answered = false;
+let sid2Done = false; // Slow It Down: true after parts step is cleared
+
+let challengeActive   = false;
+let challengeInterval = null;
+let timerSec          = 60;
+let challengeStart    = 0; // correct count when challenge began
+
+// ── Utilities ──────────────────────────────────────────────────────────────────
+function $(id) { return document.getElementById(id); }
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function randomItem() {
+  const b = getBank();
+  return b[Math.floor(Math.random() * b.length)];
+}
+
+// ── Stats display ──────────────────────────────────────────────────────────────
+function updateStats() {
+  const s = modeStats[mode];
+  $('sCorrect').textContent = s.correct;
+  $('sTried').textContent   = s.tried;
+  $('sStreak').textContent  = s.streak;
+  $('sBest').textContent    = s.best;
+  $('sBest60').textContent  = s.best60;
+}
+
+// ── Feedback ───────────────────────────────────────────────────────────────────
+function clearFeedback() {
+  const f = $('feedback');
+  f.className = 'feedback';
+  f.innerHTML = '';
+}
+
+function setFeedback(type, headline, detail) {
+  const f = $('feedback');
+  f.className = 'feedback ' + type;
+  f.innerHTML = `<strong>${headline}</strong>${detail ? `<div class="detail">${detail}</div>` : ''}`;
+}
+
+// ── Record a graded answer ─────────────────────────────────────────────────────
+function recordAnswer(isCorrect) {
+  const s = modeStats[mode];
+  s.tried++;
+  if (isCorrect) {
+    s.correct++;
+    s.streak++;
+    if (s.streak > s.best) s.best = s.streak;
+  } else {
+    s.streak = 0;
+  }
+  updateStats();
+}
+
+// ── Area switching ─────────────────────────────────────────────────────────────
+function showArea(idx) {
+  [0, 1, 2].forEach(i => $('area' + i).classList.toggle('hidden', i !== idx));
+}
+
+// ── Mode switching ─────────────────────────────────────────────────────────────
+function setMode(newMode) {
+  mode = newMode;
+  [0, 1, 2].forEach(i => $('tab' + i).classList.toggle('active', i === mode));
+  if (challengeActive) endChallenge(false);
+  nextQuestion();
+}
+
+// ── Tier switching ─────────────────────────────────────────────────────────────
+function setTier(tier) {
+  activeTier = tier;
+  ['tier_1', 'tier_2', 'tier_3'].forEach(t =>
+    $('tierBtn_' + t).classList.toggle('active', t === activeTier)
+  );
+  if (challengeActive) endChallenge(false);
+  nextQuestion();
+}
+
+// ── Word display ───────────────────────────────────────────────────────────────
+function setWordDisplay(word) {
+  $('wordDisplay').textContent = word;
+}
+
+// ── Tier-based support helpers ────────────────────────────────────────────────
+// Returns true only for Tier 1. Used to gate scaffolding across all three modes.
+function isTier1() { return activeTier === 'tier_1'; }
+
+// Learn the Part: show the full-word definition hint only on Tier 1.
+function shouldShowHint()              { return isTier1(); }
+
+// Build the Word: show part meanings in the part cards only on Tier 1.
+function shouldShowBuildMeanings()     { return isTier1(); }
+
+// Slow It Down: show the `part = meaning` breakdown after correct split only on Tier 1.
+// Tier 2/3: the highlighted tile already confirms the split — no extra info needed.
+function shouldShowSlowBreakdown()     { return isTier1(); }
+
+// Feedback detail for Build the Word and Slow It Down answer panels.
+// Tier 1: full part = meaning breakdown. Tier 2/3: definition only.
+function buildFeedbackDetail(item) {
+  if (isTier1()) {
+    return `${item.word} = ${item.definition}<br>${item.parts.map((p, i) => `${p} = ${item.part_meanings[i]}`).join(', ')}`;
+  }
+  return `${item.word} = ${item.definition}`;
+}
+
+// ── Distractor pool — built from all part meanings in the active tier ─────────
+function getDistractors(correct) {
+  const all = new Set();
+  getBank().forEach(item => item.part_meanings.forEach(m => all.add(m)));
+  all.delete(correct);
+  return shuffle([...all]).slice(0, 3);
+}
+
+// ── MODE 0 — Learn the Part ───────────────────────────────────────────────────
+function renderLearnThePart(item) {
+  const idx     = Math.floor(Math.random() * item.parts.length);
+  const part    = item.parts[idx];
+  const correct = item.part_meanings[idx];
+
+  setWordDisplay(item.word);
+  $('wordHint').textContent  = shouldShowHint() ? item.definition : '';
+  $('instruction').innerHTML = `What does <strong>"${part}"</strong> mean?`;
+  showArea(0);
+
+  const choices = shuffle([correct, ...getDistractors(correct)]);
+  const grid    = $('choices0');
+  grid.innerHTML = '';
+
+  choices.forEach(choice => {
+    const btn = document.createElement('button');
+    btn.className   = 'choice-btn';
+    btn.textContent = choice;
+    btn.onclick = () => {
+      if (answered) return;
+      answered = true;
+      const ok = choice === correct;
+      grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok) markCorrect(grid, correct);
+      recordAnswer(ok);
+      setFeedback(
+        ok ? 'good' : 'bad',
+        ok ? 'Correct.' : 'Not quite.',
+        `${item.word} = ${item.definition}<br>"${part}" = ${correct}`
+      );
+    };
+    grid.appendChild(btn);
+  });
+}
+
+// ── MODE 1 — Build the Word ───────────────────────────────────────────────────
+function renderBuildTheWord(item) {
+  setWordDisplay(item.word);
+  $('wordHint').textContent    = '';
+  $('instruction').textContent = 'Use the parts to work out the whole-word meaning.';
+  showArea(1);
+
+  const pcWrap = $('partCards1');
+  pcWrap.innerHTML = '';
+  item.parts.forEach((part, i) => {
+    const div = document.createElement('div');
+    div.className = 'part-card';
+    div.innerHTML = shouldShowBuildMeanings()
+      ? `<div class="pc-part">${part}</div><div class="pc-meaning">${item.part_meanings[i]}</div>`
+      : `<div class="pc-part">${part}</div>`;
+    pcWrap.appendChild(div);
+  });
+
+  const choices = shuffle([item.definition, ...item.definition_distractors].slice(0, 4));
+  const grid    = $('choices1');
+  grid.innerHTML = '';
+
+  choices.forEach(choice => {
+    const btn = document.createElement('button');
+    btn.className   = 'choice-btn';
+    btn.textContent = choice;
+    btn.onclick = () => {
+      if (answered) return;
+      answered = true;
+      const ok = choice === item.definition;
+      grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok) markCorrect(grid, item.definition);
+      recordAnswer(ok);
+      setFeedback(
+        ok ? 'good' : 'bad',
+        ok ? 'Correct.' : 'Not quite.',
+        buildFeedbackDetail(item)
+      );
+    };
+    grid.appendChild(btn);
+  });
+}
+
+// ── MODE 2 — Slow It Down ─────────────────────────────────────────────────────
+// Step 1 (part selection) is NOT graded. No score changes until step 2.
+function renderSlowItDown(item) {
+  sid2Done = false;
+  setWordDisplay(item.word);
+  $('wordHint').textContent    = '';
+  $('instruction').textContent = 'Identify the parts first — then choose the meaning.';
+  showArea(2);
+  $('partBreakdown2').classList.add('hidden');
+  $('meaningReveal2').classList.add('hidden');
+  clearFeedback();
+
+  const correctPair = item.parts.join(' + ');
+  const options = shuffle([
+    correctPair,
+    ...item.part_pair_distractors.map(p => p.join(' + '))
+  ]).slice(0, 4);
+
+  const tileGrid = $('tileGrid2');
+  tileGrid.innerHTML = '';
+
+  options.forEach(pair => {
+    const btn = document.createElement('button');
+    btn.className   = 'tile-btn';
+    btn.textContent = pair;
+    btn.onclick = () => {
+      if (sid2Done) return;
+      if (pair === correctPair) {
+        // ✓ Correct parts — ungraded, just advance
+        sid2Done = true;
+        btn.classList.add('selected');
+        tileGrid.querySelectorAll('.tile-btn').forEach(b => b.disabled = true);
+        $('instruction').textContent = 'Good. Now choose the meaning.';
+        // Tier 1: show part = meaning breakdown. Tier 2/3: highlighted tile is enough.
+        const bd = $('partBreakdown2');
+        if (shouldShowSlowBreakdown()) {
+          bd.innerHTML = item.parts.map((p, i) => `${p} = ${item.part_meanings[i]}`).join('<br>');
+          bd.classList.remove('hidden');
+        } else {
+          bd.classList.add('hidden');
+        }
+        revealMeaningStep(item);
+      } else {
+        // ✗ Wrong parts — ungraded nudge, no score change
+        btn.classList.add('nudge');
+        setTimeout(() => btn.classList.remove('nudge'), 500);
+        $('instruction').textContent = "That's not the right parts. Try again.";
+      }
+    };
+    tileGrid.appendChild(btn);
+  });
+}
+
+function revealMeaningStep(item) {
+  const reveal = $('meaningReveal2');
+  reveal.classList.remove('hidden');
+
+  const choices = shuffle([item.definition, ...item.definition_distractors].slice(0, 4));
+  const grid    = $('choices2');
+  grid.innerHTML = '';
+
+  choices.forEach(choice => {
+    const btn = document.createElement('button');
+    btn.className   = 'choice-btn';
+    btn.textContent = choice;
+    btn.onclick = () => {
+      if (answered) return;
+      answered = true;
+      const ok = choice === item.definition;
+      grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok) markCorrect(grid, item.definition);
+      recordAnswer(ok); // only graded answer in this mode
+      setFeedback(
+        ok ? 'good' : 'bad',
+        ok ? 'Correct.' : 'Not quite.',
+        buildFeedbackDetail(item)
+      );
+    };
+    grid.appendChild(btn);
+  });
+}
+
+// Highlight the correct answer in a choice grid
+function markCorrect(grid, correctText) {
+  grid.querySelectorAll('.choice-btn').forEach(b => {
+    if (b.textContent === correctText) b.classList.add('correct');
+  });
+}
+
+// ── Navigation ─────────────────────────────────────────────────────────────────
+function nextQuestion() {
+  answered = false;
+  sid2Done = false;
+  clearFeedback();
+  current = randomItem();
+  if (mode === 0) renderLearnThePart(current);
+  if (mode === 1) renderBuildTheWord(current);
+  if (mode === 2) renderSlowItDown(current);
+  updateStats();
+}
+
+function resetMode() {
+  const s = modeStats[mode];
+  s.correct = 0; s.tried = 0; s.streak = 0; s.best = 0; s.best60 = 0;
+  if (challengeActive) endChallenge(false);
+  nextQuestion();
+}
+
+// ── 60-Second Challenge ────────────────────────────────────────────────────────
+function toggleChallenge() {
+  challengeActive ? endChallenge(true) : startChallenge();
+}
+
+function startChallenge() {
+  challengeActive  = true;
+  timerSec         = 60;
+  challengeStart   = modeStats[mode].correct;
+
+  $('challengeBtn').textContent = 'End Challenge';
+  $('challengeBtn').className   = 'ctrl-btn challenge-end';
+  $('timerBox').classList.add('visible');
+  tickTimer();
+
+  challengeInterval = setInterval(() => {
+    timerSec--;
+    tickTimer();
+    if (timerSec <= 0) endChallenge(true);
+  }, 1000);
+
+  nextQuestion();
+}
+
+function endChallenge(saveBest) {
+  challengeActive = false;
+  clearInterval(challengeInterval);
+  challengeInterval = null;
+
+  let scored = 0;
+  if (saveBest) {
+    scored = modeStats[mode].correct - challengeStart;
+    if (scored > modeStats[mode].best60) modeStats[mode].best60 = scored;
+    setFeedback('good', "Time's up!", `You got ${scored} correct.<br>Best: ${modeStats[mode].best60}`);
+  }
+
+  $('challengeBtn').textContent = '60-Second Challenge';
+  $('challengeBtn').className   = 'ctrl-btn challenge-start';
+  $('timerBox').classList.remove('visible');
+  updateStats();
+}
+
+function tickTimer() {
+  const m = Math.floor(timerSec / 60);
+  const s = timerSec % 60;
+  $('timerVal').textContent = `${m}:${String(s).padStart(2, '0')}`;
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────────
+updateStats();
+nextQuestion();
+</script>
+</body>
+</html>
