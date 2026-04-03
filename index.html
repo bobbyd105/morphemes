@@ -35,11 +35,11 @@ body {
 .wrap {
   max-width: 680px;
   margin: 0 auto;
-  padding: 24px 16px 56px;
+  padding: 18px 16px 40px;
 }
 
 /* ── Header ── */
-.header { margin-bottom: 22px; }
+.header { margin-bottom: 16px; }
 .header h1 {
   font-size: 26px;
   font-weight: 800;
@@ -54,19 +54,19 @@ body {
 /* ── Tabs ── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
   margin-bottom: 16px;
 }
 .tab-btn {
-  padding: 13px 10px;
+  padding: 13px 8px;
   border-radius: 13px;
   border: 1.5px solid var(--line);
   background: var(--card);
   cursor: pointer;
   font: inherit;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--muted);
   transition: border-color 0.1s, color 0.1s, background 0.1s;
   text-align: center;
@@ -80,7 +80,7 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 .tier-row-label {
   font-size: 11px;
@@ -110,7 +110,7 @@ body {
 .stats-row {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   align-items: stretch;
 }
 .stat-box {
@@ -119,8 +119,8 @@ body {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 13px;
-  padding: 11px 6px;
-  text-align: center;
+  padding: 10px 10px;
+  text-align: left;
 }
 .stat-label {
   font-size: 10px;
@@ -128,15 +128,37 @@ body {
   letter-spacing: 0.05em;
   color: var(--muted);
   font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
-.stat-value {
+.stat-main {
   font-size: 22px;
   font-weight: 800;
-  margin-top: 2px;
+  margin-top: 3px;
   color: var(--ink);
+  line-height: 1.05;
+}
+.stat-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.2;
+}
+.stat-split {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 5px;
+}
+.stat-key {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.stat-value {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.1;
 }
 .timer-box {
   display: none;
@@ -166,7 +188,7 @@ body {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 22px;
-  padding: 24px;
+  padding: 20px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.04);
 }
 
@@ -175,20 +197,20 @@ body {
   font-weight: 800;
   letter-spacing: -0.3px;
   line-height: 1.1;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   word-break: normal;
   overflow-wrap: break-word;
 }
 .instruction {
   font-size: 15px;
   color: var(--muted);
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   min-height: 22px;
 }
 .word-hint {
   font-size: 14px;
   color: var(--muted);
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   font-style: italic;
 }
 .word-hint:empty { display: none; }
@@ -198,7 +220,7 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 .part-card {
   background: var(--tile-bg);
@@ -289,25 +311,29 @@ body {
 
 /* ── Feedback ── */
 .feedback {
-  display: none;
-  margin-top: 16px;
-  padding: 13px 16px;
-  border-radius: 13px;
-  font-size: 15px;
-  line-height: 1.5;
+  display: block;
+  margin-top: 10px;
+  min-height: 54px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  visibility: hidden;
+  background: transparent;
+  border: 1px solid transparent;
 }
-.feedback.good { display: block; background: var(--green-bg); color: var(--green-t); }
-.feedback.bad  { display: block; background: var(--red-bg);   color: var(--red-t);   }
+.feedback.good { visibility: visible; background: var(--green-bg); color: var(--green-t); }
+.feedback.bad  { visibility: visible; background: var(--red-bg);   color: var(--red-t);   }
 .feedback strong { font-weight: 700; }
 .feedback .detail { font-size: 13px; margin-top: 3px; opacity: 0.85; }
 
 /* ── Controls ── */
 .controls {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
-  margin-top: 20px;
-  padding-top: 16px;
+  margin-top: 8px;
+  padding-top: 10px;
   border-top: 1px solid var(--line);
   align-items: center;
 }
@@ -345,7 +371,7 @@ body {
   }
 
   .header {
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
 
   .header h1 {
@@ -360,7 +386,7 @@ body {
 
   .tier-row {
     gap: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     flex-wrap: wrap;
   }
 
@@ -375,14 +401,14 @@ body {
   }
 
   .tabs {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
     margin-bottom: 12px;
   }
 
   .tab-btn {
-    padding: 11px 8px;
-    font-size: 13px;
+    padding: 10px 6px;
+    font-size: 12px;
     border-radius: 11px;
   }
 
@@ -390,14 +416,14 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .stat-box,
   .timer-box {
     width: auto;
     min-width: 0;
-    padding: 9px 6px;
+    padding: 9px 8px;
     border-radius: 11px;
   }
 
@@ -406,13 +432,22 @@ body {
     font-size: 9px;
   }
 
-  .stat-value,
+  .stat-main,
   .timer-value {
     font-size: 18px;
   }
 
+  .stat-value {
+    font-size: 16px;
+  }
+
+  .stat-sub,
+  .stat-key {
+    font-size: 11px;
+  }
+
   .card {
-    padding: 18px 16px;
+    padding: 16px 14px;
     border-radius: 18px;
   }
 
@@ -428,7 +463,7 @@ body {
 
   .instruction {
     font-size: 14px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     min-height: 0;
   }
 
@@ -464,8 +499,8 @@ body {
 
   .controls {
     gap: 8px;
-    margin-top: 16px;
-    padding-top: 14px;
+    margin-top: 10px;
+    padding-top: 12px;
   }
 
   .ctrl-btn {
@@ -497,6 +532,129 @@ body {
     padding: 8px 10px;
     font-size: 12px;
   }
+
+  .feedback {
+    margin-top: 12px;
+    min-height: 60px;
+    padding: 11px 12px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1024px) and (orientation: landscape) {
+  .wrap {
+    padding-top: 12px;
+    padding-bottom: 24px;
+  }
+
+  .header {
+    margin-bottom: 10px;
+  }
+
+  .header .sub {
+    margin-top: 1px;
+  }
+
+  .tabs,
+  .stats-row {
+    margin-bottom: 10px;
+  }
+
+  .card {
+    padding: 16px 18px;
+  }
+
+  .word-display {
+    font-size: 32px;
+  }
+
+  .word-hint {
+    margin-bottom: 8px;
+  }
+
+  .instruction {
+    margin-bottom: 10px;
+  }
+
+  .part-cards {
+    margin-bottom: 12px;
+  }
+
+  .meaning-reveal {
+    margin-top: 14px;
+    padding-top: 14px;
+  }
+
+  .feedback {
+    min-height: 48px;
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .controls {
+    margin-top: 8px;
+    padding-top: 10px;
+  }
+}
+
+/* ── Morpheme Bank ── */
+.bank-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.bank-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.bank-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.bank-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--tile-bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 13px;
+}
+.bk-morph {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+}
+.bk-meaning {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 1px;
+}
+.bk-examples {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+.stats-row.bank-active {
+  opacity: 0.3;
+  pointer-events: none;
+}
+@media (max-width: 600px) {
+  .bank-card { padding: 16px 14px; border-radius: 18px; gap: 18px; }
+  .bank-grid { grid-template-columns: 1fr; gap: 7px; }
 }
 
 </style>
@@ -511,30 +669,41 @@ body {
 
   <div class="tier-row">
     <span class="tier-row-label">Level</span>
-    <button class="tier-btn active" id="tierBtn_tier_1" onclick="setTier('tier_1')">Tier 1</button>
-    <button class="tier-btn"        id="tierBtn_tier_2" onclick="setTier('tier_2')">Tier 2</button>
-    <button class="tier-btn"        id="tierBtn_tier_3" onclick="setTier('tier_3')">Tier 3</button>
+    <button class="tier-btn active" id="tierBtn_tier_1" onclick="setTier('tier_1')">1</button>
+    <button class="tier-btn"        id="tierBtn_tier_2" onclick="setTier('tier_2')">2</button>
+    <button class="tier-btn"        id="tierBtn_tier_3" onclick="setTier('tier_3')">3</button>
   </div>
 
   <nav class="tabs">
     <button class="tab-btn active" id="tab0" onclick="setMode(0)">Learn the Part</button>
     <button class="tab-btn"        id="tab1" onclick="setMode(1)">Build the Word</button>
     <button class="tab-btn"        id="tab2" onclick="setMode(2)">Slow It Down</button>
+    <button class="tab-btn"        id="tab3" onclick="openBank()">Morpheme Bank</button>
   </nav>
 
-  <div class="stats-row">
-    <div class="stat-box"><div class="stat-label">Correct</div>    <div class="stat-value" id="sCorrect">0</div></div>
-    <div class="stat-box"><div class="stat-label">Tried</div>      <div class="stat-value" id="sTried">0</div></div>
-    <div class="stat-box"><div class="stat-label">Streak</div>     <div class="stat-value" id="sStreak">0</div></div>
-    <div class="stat-box"><div class="stat-label">Best Streak</div><div class="stat-value" id="sBest">0</div></div>
-    <div class="stat-box"><div class="stat-label">Best 60s</div>   <div class="stat-value" id="sBest60">0</div></div>
+  <div class="stats-row" id="statsRow">
+    <div class="stat-box">
+      <div class="stat-label">Accuracy</div>
+      <div class="stat-main" id="sAccuracyFraction">0/0</div>
+      <div class="stat-sub" id="sAccuracyPercent">0%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Streaks</div>
+      <div class="stat-split"><span class="stat-key">Now</span><span class="stat-value" id="sStreakNow">0</span></div>
+      <div class="stat-split"><span class="stat-key">Best</span><span class="stat-value" id="sStreakBest">0</span></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Best 60s</div>
+      <div class="stat-main" id="sBest60">0</div>
+      <div class="stat-sub">Top challenge score</div>
+    </div>
     <div class="timer-box" id="timerBox">
       <div class="timer-label">Time</div>
       <div class="timer-value" id="timerVal">1:00</div>
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" id="gameCard">
     <div class="word-display" id="wordDisplay"></div>
     <div class="word-hint"    id="wordHint"></div>
     <div class="instruction"  id="instruction"></div>
@@ -569,6 +738,22 @@ body {
       <button class="ctrl-btn challenge-start" id="challengeBtn" onclick="toggleChallenge()">60-Second Challenge</button>
       <button class="ctrl-btn primary" onclick="nextQuestion()">Next</button>
       <button class="ctrl-btn" onclick="resetMode()">Reset This Mode</button>
+    </div>
+  </div>
+
+  <!-- Morpheme Bank -->
+  <div id="area3" class="bank-card hidden">
+    <div>
+      <div class="bank-section-title">Prefixes</div>
+      <div class="bank-grid" id="bankPrefixes"></div>
+    </div>
+    <div>
+      <div class="bank-section-title">Suffixes</div>
+      <div class="bank-grid" id="bankSuffixes"></div>
+    </div>
+    <div>
+      <div class="bank-section-title">Roots</div>
+      <div class="bank-grid" id="bankRoots"></div>
     </div>
   </div>
 
@@ -1918,6 +2103,54 @@ tier_3: [
 let activeTier = 'tier_1';
 function getBank() { return wordBank[activeTier]; }
 
+// ── Morpheme Bank data ─────────────────────────────────────────────────────────
+const morphemeBank = {
+  prefixes: [
+    { morpheme: "pre-",   meaning: "before",     examples: ["preview", "pretest", "preheat"] },
+    { morpheme: "re-",    meaning: "again",      examples: ["replay", "rewrite", "rebuild"] },
+    { morpheme: "un-",    meaning: "not",        examples: ["unhappy", "undo", "unclear"] },
+    { morpheme: "dis-",   meaning: "not / apart",examples: ["dislike", "disagree", "disconnect"] },
+    { morpheme: "mis-",   meaning: "wrongly",    examples: ["misread", "misspell", "misplace"] },
+    { morpheme: "in-",    meaning: "not",        examples: ["inactive", "incorrect"] },
+    { morpheme: "im-",    meaning: "not",        examples: ["impossible", "import"] },
+    { morpheme: "ir-",    meaning: "not",        examples: ["irregular"] },
+    { morpheme: "sub-",   meaning: "under",      examples: ["submarine", "subway", "subzero"] },
+    { morpheme: "trans-", meaning: "across",     examples: ["transport", "transfer", "transatlantic"] },
+    { morpheme: "uni-",   meaning: "one",        examples: ["unicycle", "uniform"] },
+    { morpheme: "bi-",    meaning: "two",        examples: ["bicycle", "bilingual", "bisect"] },
+    { morpheme: "tri-",   meaning: "three",      examples: ["triangle", "tricycle"] },
+    { morpheme: "auto-",  meaning: "self",       examples: ["autograph", "automatic"] },
+    { morpheme: "tele-",  meaning: "far",        examples: ["telephone", "telescope", "television"] },
+    { morpheme: "non-",   meaning: "not",        examples: ["nonfiction", "nonsense", "nonstop"] },
+  ],
+  suffixes: [
+    { morpheme: "-er",    meaning: "person who", examples: ["teacher", "reader", "farmer"] },
+    { morpheme: "-or",    meaning: "person who", examples: ["actor", "inventor", "educator"] },
+    { morpheme: "-ful",   meaning: "full of",    examples: ["helpful", "joyful", "careful"] },
+    { morpheme: "-less",  meaning: "without",    examples: ["careless", "hopeless", "fearless"] },
+    { morpheme: "-ness",  meaning: "state of",   examples: ["kindness", "sadness", "darkness"] },
+    { morpheme: "-ly",    meaning: "in a way",   examples: ["quickly", "slowly", "softly"] },
+    { morpheme: "-ment",  meaning: "result of",  examples: ["payment", "movement", "shipment"] },
+    { morpheme: "-able",  meaning: "able to be", examples: ["readable", "washable", "breakable"] },
+    { morpheme: "-ist",   meaning: "person who", examples: ["scientist", "artist", "pianist"] },
+    { morpheme: "-logy",  meaning: "study of",   examples: ["biology", "geology", "chronology"] },
+  ],
+  roots: [
+    { morpheme: "spect",  meaning: "look",           examples: ["inspect", "spectator", "respect"] },
+    { morpheme: "port",   meaning: "carry",          examples: ["transport", "import", "export"] },
+    { morpheme: "bio",    meaning: "life",           examples: ["biology", "biography", "biodegradable"] },
+    { morpheme: "geo",    meaning: "earth",          examples: ["geography", "geology", "geometry"] },
+    { morpheme: "chrono", meaning: "time",           examples: ["chronology", "chronological"] },
+    { morpheme: "circum", meaning: "around",         examples: ["circumference", "circumnavigate"] },
+    { morpheme: "peri",   meaning: "around",         examples: ["perimeter", "periscope"] },
+    { morpheme: "micro",  meaning: "small",          examples: ["microscope", "microscopic", "microchip"] },
+    { morpheme: "thermo", meaning: "heat",           examples: ["thermometer", "thermostat", "thermal"] },
+    { morpheme: "graph",  meaning: "write / record", examples: ["autograph", "telegraph", "biography"] },
+    { morpheme: "sym",    meaning: "same / together",examples: ["symmetry", "symphony", "symbiotic"] },
+    { morpheme: "aqua",   meaning: "water",          examples: ["aquarium", "aquatic", "aqueduct"] },
+  ]
+};
+
 // ── Per-mode stats ─────────────────────────────────────────────────────────────
 // Index 0 = Learn the Part, 1 = Build the Word, 2 = Slow It Down
 const modeStats = [
@@ -1927,10 +2160,11 @@ const modeStats = [
 ];
 
 // ── App state ──────────────────────────────────────────────────────────────────
-let mode     = 0;
-let current  = null;
-let answered = false;
-let sid2Done = false; // Slow It Down: true after parts step is cleared
+let mode        = 0;
+let showingBank = false;
+let current     = null;
+let answered    = false;
+let sid2Done    = false; // Slow It Down: true after parts step is cleared
 
 let challengeActive   = false;
 let challengeInterval = null;
@@ -1949,19 +2183,47 @@ function shuffle(arr) {
   return a;
 }
 
+let recentQuizParts = [];
+
+function getItemQuizKeys(item) {
+  const indexes = getLearnPartIndexes(item);
+  return indexes.map(i => normalizeMorphemeText(item.parts[i])).filter(Boolean);
+}
+
+function pickWeightedRandom(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
+function trackRecentQuizParts(item) {
+  const keys = getItemQuizKeys(item);
+  keys.forEach(key => {
+    recentQuizParts.push(key);
+    if (recentQuizParts.length > 8) recentQuizParts.shift();
+  });
+}
+
 function randomItem() {
-  const b = getBank();
-  return b[Math.floor(Math.random() * b.length)];
+  const bank = getBank();
+  const filtered = bank.filter(item => {
+    const keys = getItemQuizKeys(item);
+    return !keys.some(key => recentQuizParts.includes(key));
+  });
+
+  const pool = filtered.length >= 6 ? filtered : bank;
+  const chosen = pickWeightedRandom(pool);
+  trackRecentQuizParts(chosen);
+  return chosen;
 }
 
 // ── Stats display ──────────────────────────────────────────────────────────────
 function updateStats() {
   const s = modeStats[mode];
-  $('sCorrect').textContent = s.correct;
-  $('sTried').textContent   = s.tried;
-  $('sStreak').textContent  = s.streak;
-  $('sBest').textContent    = s.best;
-  $('sBest60').textContent  = s.best60;
+  const percent = s.tried ? Math.round((s.correct / s.tried) * 100) : 0;
+  $('sAccuracyFraction').textContent = `${s.correct}/${s.tried}`;
+  $('sAccuracyPercent').textContent  = `${percent}%`;
+  $('sStreakNow').textContent        = s.streak;
+  $('sStreakBest').textContent       = s.best;
+  $('sBest60').textContent           = s.best60;
 }
 
 // ── Feedback ───────────────────────────────────────────────────────────────────
@@ -1998,8 +2260,12 @@ function showArea(idx) {
 
 // ── Mode switching ─────────────────────────────────────────────────────────────
 function setMode(newMode) {
+  showingBank = false;
   mode = newMode;
-  [0, 1, 2].forEach(i => $('tab' + i).classList.toggle('active', i === mode));
+  [0, 1, 2, 3].forEach(i => $('tab' + i).classList.toggle('active', i === mode));
+  $('statsRow').classList.remove('bank-active');
+  $('gameCard').classList.remove('hidden');
+  $('area3').classList.add('hidden');
   if (challengeActive) endChallenge(false);
   nextQuestion();
 }
@@ -2010,8 +2276,41 @@ function setTier(tier) {
   ['tier_1', 'tier_2', 'tier_3'].forEach(t =>
     $('tierBtn_' + t).classList.toggle('active', t === activeTier)
   );
+  if (showingBank) { setMode(mode); return; }
   if (challengeActive) endChallenge(false);
   nextQuestion();
+}
+
+// ── Morpheme Bank ──────────────────────────────────────────────────────────────
+function openBank() {
+  showingBank = true;
+  if (challengeActive) endChallenge(false);
+  [0, 1, 2, 3].forEach(i => $('tab' + i).classList.toggle('active', i === 3));
+  $('statsRow').classList.add('bank-active');
+  $('gameCard').classList.add('hidden');
+  $('area3').classList.remove('hidden');
+  clearFeedback();
+  renderBank();
+}
+
+function renderBank() {
+  [
+    { key: 'prefixes', id: 'bankPrefixes' },
+    { key: 'suffixes', id: 'bankSuffixes' },
+    { key: 'roots',    id: 'bankRoots'    },
+  ].forEach(({ key, id }) => {
+    const container = $(id);
+    if (container.childElementCount) return; // already rendered
+    morphemeBank[key].forEach(entry => {
+      const div = document.createElement('div');
+      div.className = 'bank-entry';
+      div.innerHTML =
+        `<span class="bk-morph">${entry.morpheme}</span>` +
+        `<span class="bk-meaning">${entry.meaning}</span>` +
+        `<span class="bk-examples">${entry.examples.join(' · ')}</span>`;
+      container.appendChild(div);
+    });
+  });
 }
 
 // ── Word display ───────────────────────────────────────────────────────────────
@@ -2057,11 +2356,40 @@ function buildFeedbackDetail(item) {
   return `${item.word} = ${item.definition}`;
 }
 
-// ── Distractor pool — built from all part meanings in the active tier ─────────
+// ── Distractor pool — built from confusion groups first, then active tier ─────
+const meaningConfusionGroups = [
+  ["before", "again", "not", "wrong"],
+  ["under", "across", "around", "far"],
+  ["one", "two", "three"],
+  ["self", "person who", "same", "together"],
+  ["full of", "without", "state of", "in a way"],
+  ["result of", "able to be", "able to", "study of"],
+  ["life", "earth", "water", "heat", "time"],
+  ["look", "see", "sound", "write", "measure", "carry"],
+  ["wheel", "angle", "foot", "language"],
+  ["history", "order", "related to", "control"],
+  ["join", "cut", "lead", "travel"],
+  ["sea", "soil", "zero", "Atlantic"],
+  ["made-up story", "sense", "same shape", "language"]
+];
+
+function normalizeMeaningKey(text) {
+  return String(text).trim().toLowerCase();
+}
+
+function getMeaningConfusions(correct) {
+  const key = normalizeMeaningKey(correct);
+  const matches = meaningConfusionGroups.find(group => group.map(normalizeMeaningKey).includes(key));
+  if (!matches) return [];
+  return matches.filter(value => normalizeMeaningKey(value) !== key);
+}
+
 function getDistractors(correct) {
-  const all = new Set();
-  getBank().forEach(item => item.part_meanings.forEach(m => all.add(m)));
-  all.delete(correct);
+  const fromGroups = getMeaningConfusions(correct);
+  const all = new Set(fromGroups);
+  getBank().forEach(item => item.part_meanings.forEach(m => {
+    if (normalizeMeaningKey(m) !== normalizeMeaningKey(correct)) all.add(m);
+  }));
   return shuffle([...all]).slice(0, 3);
 }
 
@@ -2075,7 +2403,7 @@ function renderLearnThePart(item) {
 
   setWordDisplay(item.word);
   $('wordHint').textContent  = shouldShowHint() ? item.definition : '';
-  $('instruction').innerHTML = `What does <strong>"${part}"</strong> mean?`;
+  $('instruction').innerHTML = `In <strong>${item.word}</strong>, what does <strong>"${part}"</strong> mean?`;
   showArea(0);
 
   const choices = shuffle([correct, ...getDistractors(correct)]);
